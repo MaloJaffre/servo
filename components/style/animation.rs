@@ -676,7 +676,7 @@ pub fn update_style_for_animation(context: &SharedStyleContext,
                 AnimationDirection::Normal => {
                     target_keyframe_position =
                         animation.steps.iter().position(|step| {
-                            total_progress as f32 <= step.start_percentage.0
+                            total_progress as f32 <= (step.start_percentage.0).0
                         });
 
                     last_keyframe_position = target_keyframe_position.and_then(|pos| {
@@ -686,7 +686,7 @@ pub fn update_style_for_animation(context: &SharedStyleContext,
                 AnimationDirection::Reverse => {
                     target_keyframe_position =
                         animation.steps.iter().rev().position(|step| {
-                            total_progress as f32 <= 1. - step.start_percentage.0
+                            total_progress as f32 <= 1. - (step.start_percentage.0).0
                         }).map(|pos| animation.steps.len() - pos - 1);
 
                     last_keyframe_position = target_keyframe_position.and_then(|pos| {
@@ -710,14 +710,15 @@ pub fn update_style_for_animation(context: &SharedStyleContext,
 
             let last_keyframe = &animation.steps[last_keyframe_position];
 
-            let relative_timespan = (target_keyframe.start_percentage.0 - last_keyframe.start_percentage.0).abs();
+            let relative_timespan =
+                ((target_keyframe.start_percentage.0).0 - (last_keyframe.start_percentage.0).0).abs();
             let relative_duration = relative_timespan as f64 * duration;
             let last_keyframe_ended_at = match state.current_direction {
                 AnimationDirection::Normal => {
-                    state.started_at + (total_duration * last_keyframe.start_percentage.0 as f64)
+                    state.started_at + (total_duration * (last_keyframe.start_percentage.0).0 as f64)
                 }
                 AnimationDirection::Reverse => {
-                    state.started_at + (total_duration * (1. - last_keyframe.start_percentage.0 as f64))
+                    state.started_at + (total_duration * (1. - (last_keyframe.start_percentage.0).0 as f64))
                 }
                 _ => unreachable!(),
             };
